@@ -1,7 +1,7 @@
-DROP TABLE users IF EXISTS CASCADE;
-DROP TABLE properties IF EXISTS CASCADE;
-DROP TABLE reservations IF EXISTS CASCADE;
-DROP TABLE property_reviews IF EXISTS CASCADE;
+DROP TABLE  IF EXISTS users CASCADE;
+DROP TABLE  IF EXISTS properties CASCADE;
+DROP TABLE  IF EXISTS reservations CASCADE;
+DROP TABLE  IF EXISTS property_reviews CASCADE;
 
 CREATE TABLE users  (
   id  SERIAL PRIMARY KEY NOT NULL,
@@ -35,16 +35,19 @@ CREATE TABLE reservations (
   id SERIAL PRIMARY KEY NOT NULL,
   start_date DATE  NOT NULL,
   end_date DATE  NOT NULL,
-  propertie_id INTEGER REFERENCES propertie(id) ON DELETE CASCADE ,
+  property_id INTEGER REFERENCES properties(id) ON DELETE CASCADE ,
   guest_id INTEGER  REFERENCES users(id) ON DELETE CASCADE
 );
 SELECT * FROM reservations;
 
 CREATE TABLE property_reviews(
   guest_id INTEGER  REFERENCES users(id) ON DELETE CASCADE,
-  propertie_id INTEGER REFERENCES propertie(id) ON DELETE CASCADE ,
+  property_id INTEGER REFERENCES properties(id) ON DELETE CASCADE ,
   reservations_id INTEGER REFERENCES reservations(id) ON DELETE CASCADE ,
   rating SMALLINT  NOT NULL DEFAULT 0,
   message TEXT  
 );
 SELECT * FROM property_reviews;
+
+
+
