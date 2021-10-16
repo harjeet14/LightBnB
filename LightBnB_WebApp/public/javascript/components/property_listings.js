@@ -38,7 +38,14 @@ $(() => {
       })
       $('.delete-button').on('click', function () {
         const idData = $(this).attr('id').substring(16);
-        console.log(`delete ${idData}`);
+        deleteReservation({ reservation_id: idData })
+          .then(() => {
+            propertyListings.clearListings();
+            getAllListings().then(function (json) {
+              propertyListings.addProperties(json.properties);
+              views_manager.show('listings');
+            });
+          })
       })
     }
   }
