@@ -108,7 +108,7 @@ const getAllProperties = function (options, limit = 10) {
   const queryParams = [];
   // 2
   let queryString = `
-  SELECT properties.*, avg(property_reviews.rating) as average_rating
+  SELECT properties.*, avg(property_reviews.rating) as average_rating, count(property_reviews.rating) as review_count
   FROM properties
   JOIN property_reviews ON properties.id = property_id
   `;
@@ -160,6 +160,38 @@ const getAllProperties = function (options, limit = 10) {
   return pool.query(queryString, queryParams).then((res) => res.rows);
 };
 exports.getAllProperties = getAllProperties;
+
+/*
+ *  get reviews by property
+ */
+const getReviewsByProperty = function (propertyId) {
+  const queryString = `
+  SELECT property_reviews.property_id, property_reviews.rating, property_reviews.message, users.name, properties.title, reservations.start_date, reservations.end_date 
+  FROM property_reviews
+  JOIN reservations ON reservations.id = property_reviews.reservation_id
+  JOIN properties ON properties.id = property_reviews.property_id
+  JOIN users ON users.id = property_reviews.guest_id
+  WHERE properties.id = $1
+  ORDER BY reservations.start_date DESC;;
+  `
+  const queryParams = [propertyId];
+  return pool.query(queryString, queryParams).then(res => res.rows)
+}
+exports.getReviewsByProperty = getReviewsByProperty;
+
+/*
+ *  add review by reservation id
+ */
+const addReview = function (review) {
+  const queryString = `
+    INSERT INTO property_reviews (guest_id, property_id, reservation_id, rating, message) 
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *;
+  `;
+  const queryParams = [review.guest_id, review.property_id, review.id, parseInt(review.rating), review.message];
+  return pool.query(queryString, queryParams).then(res => res.rows);
+}
+exports.addReview = addReview;
 
 /**
  * Add a property to the database

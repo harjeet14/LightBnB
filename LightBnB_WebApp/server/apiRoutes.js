@@ -9,6 +9,15 @@ module.exports = function (router, database) {
       });
   });
 
+  // get reviews by property
+  router.get('/reviews/:propertyId', (req, res) => {
+    const propertyId = req.params.propertyId
+    database.getReviewsByProperty(propertyId)
+      .then(reviews => {
+        res.send(reviews);
+      })
+  })
+
   router.get('/reservations', (req, res) => {
     const userId = req.session.userId;
     if (!userId) {
@@ -79,6 +88,14 @@ module.exports = function (router, database) {
     database.updateReservation({ ...req.body, reservation_id: reservationId })
       .then(reservation => {
         res.send(reservation)
+      })
+  })
+
+  router.post('/reviews/:reservationId', (req, res) => {
+    const reservationId = req.params.reservationId;
+    database.addReview({ ...req.body })
+      .then(review => {
+        res.send(review);
       })
   })
 

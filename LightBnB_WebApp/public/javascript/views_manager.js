@@ -13,6 +13,8 @@ $(() => {
     $signUpForm.detach();
     $newReservationForm.detach();
     $updateReservationForm.detach();
+    $propertyReviews.detach();
+    $newReviewForm.detach();
     let dataTag = "";
 
     switch (item) {
@@ -34,6 +36,16 @@ $(() => {
       case 'newReservation':
         dataTag = `<h4>${data}</h4>`;
         $newReservationForm.appendTo($main);
+        $(dataTag).appendTo("#datatag");
+        break;
+      case 'showReviews':
+        getReviewsByProperty(data)
+          .then(reviews => propertyReviews.addReviews(reviews))
+        $propertyReviews.appendTo($main);
+        break;
+      case 'newReview':
+        dataTag = `<h4>${data}</h4>`;
+        $newReviewForm.appendTo($main);
         $(dataTag).appendTo("#datatag");
         break;
       case 'updateReservation':

@@ -7,6 +7,9 @@ $(() => {
       views_manager.show('newReservation', idData);
       console.log(idData);
     })
-
+    $('.review_details').on('click', function () {
+      const idData = $(this).attr('id').substring(15);
+      views_manager.show('showReviews', idData);
+    })
   });
 });
