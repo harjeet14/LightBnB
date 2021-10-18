@@ -42,10 +42,16 @@ $(() => {
         deleteReservation(idData)
           .then(() => {
             propertyListings.clearListings();
-            getAllListings().then(function (json) {
-              propertyListings.addProperties(json.properties);
-              views_manager.show('listings');
-            });
+            getFulfilledReservations()
+              .then(function (json) {
+                propertyListings.addProperties(json.reservations, { upcoming: false });
+                getUpcomingReservations()
+                  .then(json => {
+                    propertyListings.addProperties(json.reservations, { upcoming: true })
+                  })
+                views_manager.show('listings');
+              })
+              .catch(error => console.error(error));
           })
       })
       $('.add-review-button').on('click', function () {
