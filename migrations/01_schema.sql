@@ -9,7 +9,6 @@ CREATE TABLE users  (
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL
 );
-SELECT * FROM users;
 
 CREATE TABLE properties (
   id SERIAL PRIMARY KEY NOT NULL,
@@ -29,7 +28,6 @@ CREATE TABLE properties (
   post_code VARCHAR(255) NOT NULL,
   active BOOLEAN NOT NULL DEFAULT TRUE
 );
-SELECT * FROM properties;
 
 CREATE TABLE reservations (
   id SERIAL PRIMARY KEY NOT NULL,
@@ -38,7 +36,6 @@ CREATE TABLE reservations (
   property_id INTEGER REFERENCES properties(id) ON DELETE CASCADE ,
   guest_id INTEGER  REFERENCES users(id) ON DELETE CASCADE
 );
-SELECT * FROM reservations;
 
 CREATE TABLE property_reviews(
   guest_id INTEGER  REFERENCES users(id) ON DELETE CASCADE,
@@ -47,7 +44,3 @@ CREATE TABLE property_reviews(
   rating SMALLINT  NOT NULL DEFAULT 0,
   message TEXT  
 );
-SELECT * FROM property_reviews;
-
-
-
